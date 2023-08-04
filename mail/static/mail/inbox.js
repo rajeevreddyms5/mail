@@ -41,11 +41,19 @@ function compose_email() {
     .then(result => {
         // Print result to console
         console.log(result);
+        if (result.error) {
+          document.querySelector('#alert').innerHTML = result.error;
+          document.querySelector('#alert').style.display = 'block';
+        }
+        else {
+          load_mailbox('sent');
+        }
     })
 
     // Stop form from submitting
-    // document.querySelector('#alert').style.display = 'block';
     return false
+
+
   }
 }
 
