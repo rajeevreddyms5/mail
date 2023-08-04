@@ -14,12 +14,39 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#alert').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+
+  // send button
+  document.querySelector('form').onsubmit = function() {
+    const recipients = document.querySelector('#compose-recipients').value;
+    const subject = document.querySelector('#compose-subject').value;
+    const body = document.querySelector('#compose-body').value;
+
+    // send emails through API
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+          recipients: recipients,
+          subject: subject,
+          body: body,
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Print result to console
+        console.log(result);
+    })
+
+    // Stop form from submitting
+    // document.querySelector('#alert').style.display = 'block';
+    return false
+  }
 }
 
 function load_mailbox(mailbox) {
