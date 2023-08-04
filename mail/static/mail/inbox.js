@@ -41,11 +41,13 @@ function compose_email() {
     .then(result => {
         // Print result to console
         console.log(result);
+
+        // if error display error on the HTML webpage
         if (result.error) {
           document.querySelector('#alert').innerHTML = result.error;
           document.querySelector('#alert').style.display = 'block';
         }
-        else {
+        else {  //if no error then load sent mailbox
           load_mailbox('sent');
         }
     })
@@ -65,4 +67,6 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  //
 }
