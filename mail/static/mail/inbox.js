@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#compose').addEventListener('click', compose_email);
 
   //clear list
-  document.getElementById("viewemail").innerHTML = "";
+  document.getElementById("emails-view").innerHTML = "";
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -17,7 +17,6 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#viewemail').style.display = 'none';
   document.querySelector('#alert').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -67,14 +66,13 @@ function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
-  document.querySelector('#viewemail').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   //clear list
-  document.getElementById("viewemail").innerHTML = "";
+  document.getElementById("emails-view").innerHTML = "";
   
   //fetch emails
   fetch(`/emails/${mailbox}`)
@@ -88,11 +86,11 @@ function load_mailbox(mailbox) {
     let listItem = document.createElement('p');
 
     // select list id from html
-    mylist = document.querySelector('#viewemail');
+    mylist = document.querySelector('#emails-view');
 
     if (emails.length === 0) {
       listItem.innerHTML = `<div class="alert alert-danger" role="alert">No Emails in your ${mailbox.toUpperCase()}</div>`; 
-      mylist = document.querySelector('#viewemail');
+      mylist = document.querySelector('#emails-view');
       mylist.append(listItem);
     }
 
