@@ -99,7 +99,7 @@ function load_mailbox(mailbox) {
 
     //iterate over each email
     for(let i = 0; i < numberOfListItems; ++i) {
-      listItem.innerHTML = `<div class="card"> <div class="card-body">To:${emails[i].recipients} Subject:${emails[i].subject} Date:${emails[i].timestamp} </div></div>`;
+      listItem.innerHTML = `<div class="border border-dark"><table class="table"> <tbody><tr> <td>To: ${emails[i].recipients}</td><td>Subject:${emails[i].subject}</td><td>Date:${emails[i].timestamp}</td></tr> </tbody></table></div>`;
       mylist.append(listItem); // add list item to list element
       listItem = document.createElement('p'); // reset the list item
     }
@@ -107,3 +107,12 @@ function load_mailbox(mailbox) {
 });
 
 }
+
+
+
+    //iterate over each email
+    //for(let i = 0; i < numberOfListItems; ++i) {
+     // listItem.innerHTML = `<div class="card"> <div class="card-body">To: ${emails[i].recipients}Subject:${emails[i].subject}Date:${emails[i].timestamp}</div></div>`;
+    //  mylist.append(listItem); // add list item to list element
+     // listItem = document.createElement('p'); // reset the list item
+   // }
