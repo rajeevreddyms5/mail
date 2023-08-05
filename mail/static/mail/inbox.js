@@ -78,17 +78,33 @@ function load_mailbox(mailbox) {
     console.log(emails);
 
     // ... do something else with emails ...
-    emails.forEach((element) =>{
-      console.log(element.recipients);
-      console.log(element.subject);
-      console.log(element.timestamp);
-
-      // sent mailbox
-      if (mailbox === 'sent') {
-        document.querySelector('.card-body').innerHTML = `<ul>To:${element.recipients} Subject:${element.subject} Date:${element.timestamp} </ul>`;
-      }
-    });
-  
+    for (var i = 0; emails.length; ++i) {
+      document.querySelector('#list').innerHTML = emails[0].recipients;
+    }
     
 });
+
 }
+
+
+
+    //<div class="card">
+    //<div class="card-body">
+    //This is some text within a card body.
+    //</div>
+    //</div>
+
+
+    // sent mailbox
+    //if (mailbox === 'sent') {
+    //  li.innerHTML = `<ul>To:${element.recipients} Subject:${element.subject} Date:${element.timestamp} </ul>`;
+    //}
+
+    //document.querySelector('#list').append(li);
+
+    //emails.forEach((element) =>{
+     // li.append(element.recipients);
+    //  console.log(element.recipients);
+    //  console.log(element.subject);
+    //  console.log(element.timestamp);
+    //});
