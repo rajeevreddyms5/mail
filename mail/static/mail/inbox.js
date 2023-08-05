@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 
+  //clear list
+  document.getElementById("viewemail").innerHTML = "";
+
   // By default, load the inbox
   load_mailbox('inbox');
 });
@@ -70,6 +73,9 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
+  //clear list
+  document.getElementById("viewemail").innerHTML = "";
+  
   //fetch emails
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
@@ -78,33 +84,28 @@ function load_mailbox(mailbox) {
     console.log(emails);
 
     // ... do something else with emails ...
-    for (var i = 0; emails.length; ++i) {
-      document.querySelector('#list').innerHTML = emails[0].recipients;
+    //make the list item
+    let listItem = document.createElement('p');
+
+    // select list id from html
+    mylist = document.querySelector('#viewemail');
+
+    if (emails.length === 0) {
+      listItem.innerHTML = `<div class="alert alert-danger" role="alert">No Emails in your ${mailbox.toUpperCase()}</div>`; 
+      mylist = document.querySelector('#viewemail');
+      mylist.append(listItem);
     }
-    
+
+    // calculate no. of mails
+    let numberOfListItems = emails.length;
+
+    //iterate over each email
+    for(let i = 0; i < numberOfListItems; ++i) {
+      listItem.innerHTML = `<div class="card"> <div class="card-body">To:${emails[i].recipients} Subject:${emails[i].subject} Date:${emails[i].timestamp} </div></div>`;
+      mylist.append(listItem); // add list item to list element
+      listItem = document.createElement('p'); // reset the list item
+    }
+ 
 });
 
 }
-
-
-
-    //<div class="card">
-    //<div class="card-body">
-    //This is some text within a card body.
-    //</div>
-    //</div>
-
-
-    // sent mailbox
-    //if (mailbox === 'sent') {
-    //  li.innerHTML = `<ul>To:${element.recipients} Subject:${element.subject} Date:${element.timestamp} </ul>`;
-    //}
-
-    //document.querySelector('#list').append(li);
-
-    //emails.forEach((element) =>{
-     // li.append(element.recipients);
-    //  console.log(element.recipients);
-    //  console.log(element.subject);
-    //  console.log(element.timestamp);
-    //});
