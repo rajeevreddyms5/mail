@@ -93,16 +93,20 @@ function load_mailbox(mailbox) {
       mylist = document.querySelector('#email-view');
       mylist.append(listItem);
     }
+    else{
+      // calculate no. of mails
+      let numberOfListItems = emails.length;
 
-    // calculate no. of mails
-    let numberOfListItems = emails.length;
+      //iterate over each email
+      for(let i = 0; i < numberOfListItems; ++i) {
+        listItem.innerHTML = `<table class="table table-borderless"> <tbody><tr> <td>To: ${emails[i].recipients}</td><td>Subject: ${emails[i].subject}</td><td>Date: ${emails[i].timestamp}</td></tr> </tbody></table>`;
+        mylist.append(listItem); // add list item to list element
+        listItem = document.createElement('p'); // reset the list item
+      }
 
-    //iterate over each email
-    for(let i = 0; i < numberOfListItems; ++i) {
-      listItem.innerHTML = `<div class="border border-dark"><table class="table"> <tbody><tr> <td>To: ${emails[i].recipients}</td><td>Subject:${emails[i].subject}</td><td>Date:${emails[i].timestamp}</td></tr> </tbody></table></div>`;
-      mylist.append(listItem); // add list item to list element
-      listItem = document.createElement('p'); // reset the list item
     }
+
+    
  
 });
 
