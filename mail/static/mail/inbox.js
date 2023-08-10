@@ -58,7 +58,6 @@ function compose_email() {
     // Stop form from submitting
     return false
 
-
   }
 }
 
@@ -83,7 +82,7 @@ function load_mailbox(mailbox) {
 
     // ... do something else with emails ...
     //make the list item
-    let listItem = document.createElement('p');
+    let listItem = document.createElement('tr');
 
     // select list id from html
     mylist = document.querySelector('#email-view');
@@ -97,11 +96,16 @@ function load_mailbox(mailbox) {
       // calculate no. of mails
       let numberOfListItems = emails.length;
 
-      //iterate over each email
+      //  iterate over each email
       for(let i = 0; i < numberOfListItems; ++i) {
-        listItem.innerHTML = `<table class="table table-borderless"> <tbody><tr> <td>To: ${emails[i].recipients}</td><td>Subject: ${emails[i].subject}</td><td>Date: ${emails[i].timestamp}</td></tr> </tbody></table>`;
+        //  add style tag to table row
+        listItem.style.border = '1px solid black';
+        listItem.style.borderTop = '2px solid black';
+        
+        //  add data to table
+        listItem.innerHTML = `<td>To: ${emails[i].recipients}</td><td>Subject: ${emails[i].subject}</td><td>Date: ${emails[i].timestamp}</td>`;
         mylist.append(listItem); // add list item to list element
-        listItem = document.createElement('p'); // reset the list item
+        listItem = document.createElement('tr'); // reset the list item
       }
 
     }

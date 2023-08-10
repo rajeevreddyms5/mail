@@ -14,7 +14,17 @@
     <div id="emails-view">
         <h3 id="email-header"></h3>
 
-        <div id="email-view"></div>
+        <table class="table table-borderless">
+            <thead>
+                <tr style="display: none;">
+                    <th scope="col">sent</th>
+                    <th scope="col">subject</th>
+                    <th scope="col">date</th>
+                </tr>
+            </thead>
+            <tbody id="email-view">
+            </tbody>
+        </table>
     </div>
 
     <div id="compose-view">
