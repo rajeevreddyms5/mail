@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#compose').addEventListener('click', compose_email);
 
   //clear list
-  document.getElementById("emails-view").innerHTML = "";
+  document.getElementById("email-view").innerHTML = "";
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -69,10 +69,10 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#email-header').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   //clear list
-  document.getElementById("emails-view").innerHTML = "";
+  document.getElementById("email-view").innerHTML = "";
   
   //fetch emails
   fetch(`/emails/${mailbox}`)
@@ -86,11 +86,11 @@ function load_mailbox(mailbox) {
     let listItem = document.createElement('p');
 
     // select list id from html
-    mylist = document.querySelector('#emails-view');
+    mylist = document.querySelector('#email-view');
 
     if (emails.length === 0) {
       listItem.innerHTML = `<div class="alert alert-danger" role="alert">No Emails in your ${mailbox.toUpperCase()}</div>`; 
-      mylist = document.querySelector('#emails-view');
+      mylist = document.querySelector('#email-view');
       mylist.append(listItem);
     }
 
@@ -107,12 +107,3 @@ function load_mailbox(mailbox) {
 });
 
 }
-
-
-
-    //iterate over each email
-    //for(let i = 0; i < numberOfListItems; ++i) {
-     // listItem.innerHTML = `<div class="card"> <div class="card-body">To: ${emails[i].recipients}Subject:${emails[i].subject}Date:${emails[i].timestamp}</div></div>`;
-    //  mylist.append(listItem); // add list item to list element
-     // listItem = document.createElement('p'); // reset the list item
-   // }
