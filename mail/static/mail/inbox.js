@@ -101,15 +101,22 @@ function load_mailbox(mailbox) {
         //  add style tag to table row
         listItem.style.border = '1px solid black';
         listItem.style.borderTop = '2px solid black';
+
+        if (emails[i].read === true) {
+          listItem.style.background = '#D3D3D3';
+        }
+        else {
+          listItem.style.background = 'white';
+        }
         
         //  add data to table
-        if (mailbox === 'sent'){
-          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:20px;">${emails[i].recipients}</th><td class="text-truncate" style="max-width:90px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
+        if (mailbox === 'sent') {
+          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
           mylist.append(listItem); // add list item to list element
           listItem = document.createElement('tr'); // reset the list item
         }
         else {
-          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:20px;">${emails[i].sender}</th><td class="text-truncate" style="max-width:90px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
+          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].sender}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
           mylist.append(listItem); // add list item to list element
           listItem = document.createElement('tr'); // reset the list item
         }
