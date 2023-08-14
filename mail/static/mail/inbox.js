@@ -19,6 +19,7 @@ function compose_email() {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#alert').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#view-mail').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -66,6 +67,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#view-mail').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#email-header').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -110,7 +112,9 @@ function load_mailbox(mailbox) {
         }
 
         //make row clickable
-        listItem.setAttribute('onclick', `window.location='emails/' + ${emails[i].id};`);
+        //listItem.setAttribute('onclick', `window.location='emails/' + ${emails[i].id};`);
+        //document.querySelector('#tr').addEventListener('click', () => view_mailbox(emails[i].id));
+        
         
         //  add data to table
         if (mailbox === 'sent') {
@@ -126,10 +130,37 @@ function load_mailbox(mailbox) {
         
       }
 
+      //make row clickable
+      //listItem.setAttribute('onclick', view_mailbox(emails[i].id));
+      
+
     }
 
     
  
 });
+
+function view_mailbox(id) {
+
+  // Show the View mailbox and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#view-mail').style.display = 'block';
+
+  // fetch mail
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    // Print email
+    console.log(email);
+
+    // ... do something else with email ...
+
+
+  }); 
+
+}
+
+
 
 }
