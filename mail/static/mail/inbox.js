@@ -121,8 +121,9 @@ function load_mailbox(mailbox) {
               console.log(email);
 
               // ... do something else with email ...
-              const mail = document.querySelector("#mail-view");
+              const mail = document.querySelector("#mail-view");  // select mail view
               mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><hr><p>${email.body}</p>`;
+              // mark current mail as read status
               fetch(`/emails/${email.id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
