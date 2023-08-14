@@ -81,21 +81,50 @@ function reply_email(id, mailbox) {
       console.log(email);
 
       // ... Fill the forms with email data ...
+      if (email.subject.startsWith("Re: ")) {
+        document.querySelector('#compose-subject').value = `${email.subject}`;
+      }
+      else {
+        document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+      }
       if (mailbox === 'sent') {
         document.querySelector('#compose-recipients').value = `${email.recipients}`;
-        document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
         document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: "${email.body}"`;
       }
       else {
         document.querySelector('#compose-recipients').value = `${email.sender}`;
-        document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
         document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: "${email.body}"`;
       }
       
 
   });
   
+}
 
+
+// archive function
+function archive_state(id, state) {
+  if (state === false) {
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: true
+      })
+    });
+    load_mailbox('inbox');
+  }
+  else {
+    fetch(`/emails/${id}`, { 
+      method: 'PUT', 
+      body: JSON.stringify({ 
+        archived: false 
+      }) 
+    });
+    load_mailbox('inbox');
+  }
+
+  // refresh webpage
+  location.reload();
 }
 
 
@@ -163,7 +192,7 @@ function load_mailbox(mailbox) {
                 mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, 'sent')">Reply</button><hr><p>${email.body}</p>`;
               }
               else if (mailbox === 'inbox') {
-                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="archive">Archive</button><hr><p>${email.body}</p>`;
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="archive" onclick = "archive_state(${email.id}, false)">Archive</button><hr><p>${email.body}</p>`;
                 // mark current mail as read status
                 fetch(`/emails/${email.id}`, {
                   method: 'PUT',
@@ -173,7 +202,7 @@ function load_mailbox(mailbox) {
               });
               }
               else {
-                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="unarchive">Unarchive</button><hr><p>${email.body}</p>`;
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="unarchive" onclick = "archive_state(${email.id}, true)">Unarchive</button><hr><p>${email.body}</p>`;
               }
 
 
