@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
+  //document.querySelector('#reply').addEventListener('click', reply_email);
 
   //clear list
   document.getElementById("email-view").innerHTML = "";
@@ -61,6 +62,42 @@ function compose_email() {
 
   }
 }
+
+
+// reply function
+function reply_email(id, mailbox) {
+
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#alert').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  //fetch email
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+      // Print email
+      console.log(email);
+
+      // ... Fill the forms with email data ...
+      if (mailbox === 'sent') {
+        document.querySelector('#compose-recipients').value = `${email.recipients}`;
+        document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+        document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: "${email.body}"`;
+      }
+      else {
+        document.querySelector('#compose-recipients').value = `${email.sender}`;
+        document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+        document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: "${email.body}"`;
+      }
+      
+
+  });
+  
+
+}
+
 
 function load_mailbox(mailbox) {
   
@@ -123,10 +160,10 @@ function load_mailbox(mailbox) {
               // ... do something else with email ...
               const mail = document.querySelector("#mail-view");  // select mail view
               if (mailbox === 'sent') {
-                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button><hr><p>${email.body}</p>`;
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, 'sent')">Reply</button><hr><p>${email.body}</p>`;
               }
               else if (mailbox === 'inbox') {
-                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button> <button class="btn btn-sm btn-outline-primary" id="archive">Archive</button><hr><p>${email.body}</p>`;
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="archive">Archive</button><hr><p>${email.body}</p>`;
                 // mark current mail as read status
                 fetch(`/emails/${email.id}`, {
                   method: 'PUT',
@@ -136,7 +173,7 @@ function load_mailbox(mailbox) {
               });
               }
               else {
-                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button> <button class="btn btn-sm btn-outline-primary" id="unarchive">Unarchive</button><hr><p>${email.body}</p>`;
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply" onclick = "reply_email(${email.id}, ${mailbox})">Reply</button> <button class="btn btn-sm btn-outline-primary" id="unarchive">Unarchive</button><hr><p>${email.body}</p>`;
               }
 
 
@@ -151,7 +188,7 @@ function load_mailbox(mailbox) {
         
         //  add data to table
         if (mailbox === 'sent') {
-          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;" onclick=view_mailbox(emails[i].id)>${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
+          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
           mylist.append(listItem); // add list item to list element
           listItem = document.createElement('tr'); // reset the list item
         }
@@ -167,5 +204,6 @@ function load_mailbox(mailbox) {
 
     
 });
+
 
 }
