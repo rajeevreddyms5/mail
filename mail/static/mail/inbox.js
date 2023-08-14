@@ -19,7 +19,7 @@ function compose_email() {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#alert').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
-  document.querySelector('#view-mail').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -67,7 +67,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
-  document.querySelector('#view-mail').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#email-header').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -113,54 +113,50 @@ function load_mailbox(mailbox) {
 
         //make row clickable
         //listItem.setAttribute('onclick', `window.location='emails/' + ${emails[i].id};`);
-        //document.querySelector('#tr').addEventListener('click', () => view_mailbox(emails[i].id));
+        listItem.addEventListener("click", function() { 
+          fetch(`/emails/${emails[i].id}`)
+          .then(response => response.json())
+          .then(email => {
+              // Print email
+              console.log(email);
+
+              // ... do something else with email ...
+              const mail = document.querySelector("#mail-view");
+              mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><hr><p>${email.body}</p>`;
+              fetch(`/emails/${email.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    read: true
+                })
+              })
+
+
+              //show mail view and hide other views
+              document.querySelector('#emails-view').style.display = 'none';
+              document.querySelector('#mail-view').style.display = 'block';
+
+          }); 
+        });
+        
         
         
         //  add data to table
         if (mailbox === 'sent') {
-          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
+          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;" onclick=view_mailbox(emails[i].id)>${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
           mylist.append(listItem); // add list item to list element
           listItem = document.createElement('tr'); // reset the list item
         }
         else {
-          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].recipients}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
+          listItem.innerHTML = `<th class="text-truncate text-bold" style="max-width:25px;">${emails[i].sender}</th><td class="text-truncate" style="max-width:80px;">${emails[i].subject}</td><td class="text-muted text-truncate text-right" style="max-width:28px;">${emails[i].timestamp}</td>`;
           mylist.append(listItem); // add list item to list element
           listItem = document.createElement('tr'); // reset the list item
         }
         
       }
 
-      //make row clickable
-      //listItem.setAttribute('onclick', view_mailbox(emails[i].id));
-      
-
     }
 
     
- 
 });
-
-function view_mailbox(id) {
-
-  // Show the View mailbox and hide other views
-  document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'none';
-  document.querySelector('#view-mail').style.display = 'block';
-
-  // fetch mail
-  fetch(`/emails/${id}`)
-  .then(response => response.json())
-  .then(email => {
-    // Print email
-    console.log(email);
-
-    // ... do something else with email ...
-
-
-  }); 
-
-}
-
-
 
 }
