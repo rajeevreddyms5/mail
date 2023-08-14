@@ -122,14 +122,22 @@ function load_mailbox(mailbox) {
 
               // ... do something else with email ...
               const mail = document.querySelector("#mail-view");  // select mail view
-              mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><hr><p>${email.body}</p>`;
-              // mark current mail as read status
-              fetch(`/emails/${email.id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    read: true
-                })
-              })
+              if (mailbox === 'sent') {
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button><hr><p>${email.body}</p>`;
+              }
+              else if (mailbox === 'inbox') {
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button> <button class="btn btn-sm btn-outline-primary" id="archive">Archive</button><hr><p>${email.body}</p>`;
+                // mark current mail as read status
+                fetch(`/emails/${email.id}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                      read: true
+                  })
+              });
+              }
+              else {
+                mail.innerHTML = `<p style="line-height: 0.5"><b>From: </b>${email.sender}</p><p style="line-height: 0.5"><b>To: </b>${email.recipients}</p><p style="line-height: 0.5"><b>Subject: </b>${email.subject}</p><p style="line-height: 0.5"><b>Timestamp: </b>${email.timestamp}</p><button class="btn btn-sm btn-outline-primary" id="reply">Reply</button> <button class="btn btn-sm btn-outline-primary" id="unarchive">Unarchive</button><hr><p>${email.body}</p>`;
+              }
 
 
               //show mail view and hide other views
