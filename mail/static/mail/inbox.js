@@ -99,6 +99,12 @@ function reply_email(id, mailbox) {
 
   });
 
+  // send button
+  document.querySelector('form').onsubmit = function() {
+    const recipients = document.querySelector('#compose-recipients').value;
+    const subject = document.querySelector('#compose-subject').value;
+    const body = document.querySelector('#compose-body').value;
+
   // send emails through API
   fetch('/emails', {
     method: 'POST',
@@ -125,7 +131,7 @@ function reply_email(id, mailbox) {
 
   // Stop form from submitting
   return false
-  
+}
 }
 
 
