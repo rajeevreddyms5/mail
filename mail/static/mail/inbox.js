@@ -98,6 +98,33 @@ function reply_email(id, mailbox) {
       
 
   });
+
+  // send emails through API
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+        recipients: recipients,
+        subject: subject,
+        body: body,
+    })
+  })
+  .then(response => response.json())
+  .then(result => {
+      // Print result to console
+      console.log(result);
+
+      // if error display error on the HTML webpage
+      if (result.error) {
+        document.querySelector('#alert').innerHTML = result.error;
+        document.querySelector('#alert').style.display = 'block';
+      }
+      else {  //if no error then load sent mailbox
+        load_mailbox('sent');
+      }
+  })
+
+  // Stop form from submitting
+  return false
   
 }
 
